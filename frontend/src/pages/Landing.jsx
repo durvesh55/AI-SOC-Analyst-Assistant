@@ -41,6 +41,12 @@ const SAMPLES = [
   { label: "Data exfiltration", title: "Unusual outbound transfer", description: "4 GB uploaded to dropbox outside business hours from an engineering workstation.", category: "Data Exfiltration" },
 ];
 
+const TACTICS = ["Initial Access", "Execution", "Persistence", "Privilege Escalation", "Defense Evasion", "Credential Access", "Discovery", "Lateral Movement", "Collection", "Exfiltration", "Command & Control", "Impact"];
+
+const SUMMARY = "Encoded PowerShell was launched by winword.exe on ws-fin-07 right after a macro-enabled attachment was opened. This matches Phishing (T1566) leading to Execution (T1059.001). Suggested next steps: isolate the host, pull the mail gateway logs for the sender, and check ws-fin-07 for new scheduled tasks.";
+
+const BARS = [["Critical", 3, "var(--crit)"], ["High", 7, "var(--high)"], ["Medium", 5, "var(--med)"], ["Low", 2, "var(--low)"]];
+
 const FAQ = [
   ["Is this a real SIEM or threat-detection product?", "No. It is an educational SOC workflow platform built with simulated alerts. It does not ingest real logs or detect attacks by itself."],
   ["How much of it is AI?", "Today the ATT&CK suggestions come from transparent, readable rules - there is no hidden model, and every suggestion explains itself. An optional LLM-written case summary (always human-reviewed) is on the roadmap."],
@@ -195,6 +201,60 @@ function Suggester() {
   );
 }
 
+function Typewriter({ text, speed = 22 }) {
+  const ref = useRef(null);
+  const [n, setN] = useState(0);
+  const [started, setStarted] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce || !el || !("IntersectionObserver" in window)) { setN(text.length); return; }
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setStarted(true); io.disconnect(); } }, { threshold: 0.3 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [text]);
+  useEffect(() => {
+    if (!started) return;
+    const t = setInterval(() => setN((v) => { if (v >= text.length) { clearInterval(t); return v; } return v + 1; }), speed);
+    return () => clearInterval(t);
+  }, [started, text, speed]);
+  return <p ref={ref} className="l-type">{text.slice(0, n)}<i className={n < text.length ? "caret" : "caret off"} /></p>;
+}
+
+function Preview() {
+  return (
+    <div className="l-preview">
+      <div className="l-win">
+        <div className="l-win-bar"><i /><i /><i /><span>soc-assistant / dashboard</span></div>
+        <div className="l-win-body">
+          <div className="l-kpis">
+            <div><small>Open alerts</small><b><CountUp to={17} /></b></div>
+            <div><small>Active cases</small><b><CountUp to={6} /></b></div>
+            <div><small>Avg. triage</small><b><CountUp to={9} suffix=" min" /></b></div>
+          </div>
+          <div className="l-chart">
+            <small>Alerts by severity (sample data)</small>
+            {BARS.map(([k, v, c], i) => (
+              <div className="l-barrow" key={k}>
+                <span>{k}</span>
+                <div><i style={{ "--w": `${(v / 7) * 100}%`, background: c, transitionDelay: `${i * 120}ms` }} /></div>
+                <em>{v}</em>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="l-ai">
+        <div className="l-ai-head"><span className="l-spark">AI</span><strong>Investigation copilot</strong><small>preview - human review required</small></div>
+        <Typewriter text={SUMMARY} />
+        <div className="l-chain">
+          <span>T1566 Phishing</span><b>&rarr;</b><span>T1059.001 PowerShell</span><b>&rarr;</b><span className="dim">T1003 Credential dumping?</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Steps() {
   const [active, setActive] = useState(0);
   useEffect(() => {
@@ -253,7 +313,8 @@ export default function Landing() {
         <button className="l-burger" aria-label="Menu" onClick={() => setOpen((o) => !o)}>{open ? "x" : "="}</button>
       </header>
 
-      <section className="l-hero" id="top">
+      <section className="l-hero" id="top" onMouseMove={(e) => { const r = e.currentTarget.getBoundingClientRect(); e.currentTarget.style.setProperty("--mx", `${e.clientX - r.left}px`); e.currentTarget.style.setProperty("--my", `${e.clientY - r.top}px`); }}>
+        <div className="l-spot" />
         <div className="l-orb o1" /><div className="l-orb o2" /><div className="l-grid" />
         <div className="l-hero-copy">
           <span className="l-pill"><i /> Educational project - simulated data</span>
@@ -276,6 +337,15 @@ export default function Landing() {
         <div><b><CountUp to={86} suffix="+" /></b><span>automated backend tests</span></div>
         <div><b><CountUp to={10} /></b><span>connected workflow screens</span></div>
         <div><b>100%</b><span>of key actions audited</span></div>
+      </section>
+
+      <div className="l-marquee" aria-hidden="true">
+        <div>{[...TACTICS, ...TACTICS].map((t, i) => <span key={i}>{t}</span>)}</div>
+      </div>
+
+      <section className="l-section" id="preview">
+        <div className="l-head" data-reveal><small>Product preview</small><h2>One workspace, from first alert to final report</h2><p>See the queue, the story and the AI-assisted summary side by side.</p></div>
+        <div data-reveal><Preview /></div>
       </section>
 
       <section className="l-section" id="features">
