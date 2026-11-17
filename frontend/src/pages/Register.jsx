@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { api, getMeta } from "../api/client";
-import { ErrorBox, Field } from "../components/ui";
+import { ErrorBox, Field, PasswordInput } from "../components/ui";
 import { useAuth } from "../context/AuthContext";
 
 export default function Register() {
@@ -45,10 +45,10 @@ export default function Register() {
         </Field>
         <Field label="Email"><input type="email" value={form.email} onChange={set("email")} required autoComplete="email" /></Field>
         <Field label="Password" hint="At least 8 characters with a letter and a digit">
-          <input type="password" value={form.password} onChange={set("password")} required minLength={8} maxLength={72} autoComplete="new-password" />
+          <PasswordInput value={form.password} onChange={set("password")} required minLength={8} maxLength={72} autoComplete="new-password" />
         </Field>
         <Field label="Confirm password">
-          <input type="password" value={form.confirm} onChange={set("confirm")} required autoComplete="new-password" />
+          <PasswordInput value={form.confirm} onChange={set("confirm")} required autoComplete="new-password" />
         </Field>
         <button className="btn btn-primary btn-block" disabled={busy}>{busy ? "Creating..." : "Register"}</button>
         <p className="center">Already registered? <Link to="/login">Sign in</Link> &nbsp;|&nbsp; <Link to="/">Home</Link></p>

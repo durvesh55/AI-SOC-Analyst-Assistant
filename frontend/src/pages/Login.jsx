@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { ErrorBox, Field } from "../components/ui";
+import { ErrorBox, Field, PasswordInput } from "../components/ui";
 
 export default function Login() {
   const { login, notice } = useAuth();
@@ -36,7 +36,7 @@ export default function Login() {
           <input value={identifier} onChange={(e) => setIdentifier(e.target.value)} autoComplete="username" required autoFocus />
         </Field>
         <Field label="Password">
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" required />
+          <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" required />
         </Field>
         <button className="btn btn-primary btn-block" disabled={busy}>{busy ? "Signing in..." : "Sign in"}</button>
         <p className="center">No account? <Link to="/register">Register</Link> &nbsp;|&nbsp; <Link to="/">Back to home</Link></p>
