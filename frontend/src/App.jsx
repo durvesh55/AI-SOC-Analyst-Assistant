@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ThemeSwitcher from "./components/ThemeSwitcher";
 import { useAuth } from "./context/AuthContext";
 import AdminUsers from "./pages/AdminUsers";
 import AlertDetail from "./pages/AlertDetail";
@@ -17,6 +18,8 @@ import Register from "./pages/Register";
 export default function App() {
   const { user } = useAuth();
   return (
+    <>
+    <ThemeSwitcher />
     <Routes>
       <Route path="/" element={<Landing />} />
       <Route path="/login" element={user ? <Navigate to="/dashboard" replace /> : <Login />} />
@@ -33,5 +36,6 @@ export default function App() {
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
+    </>
   );
 }
