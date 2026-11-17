@@ -392,9 +392,6 @@ export default function Landing() {
             {!user && <Link className="l-btn l-btn-ghost" to="/login">Sign in</Link>}
             <a className="l-btn l-btn-link" href="#try">Try the ATT&amp;CK demo &rarr;</a>
           </div>
-          <ul className="l-trust">
-            <li>FastAPI</li><li>React</li><li>MongoDB</li><li>MITRE ATT&amp;CK</li><li>JWT + RBAC</li>
-          </ul>
         </div>
         <LiveFeed />
       </section>
@@ -483,7 +480,7 @@ export default function Landing() {
         </div>
         <div><h4>Product</h4><a href="#platform">Platform</a><a href="#how">How it works</a><a href="#try">ATT&amp;CK demo</a><a href="#security">Security</a></div>
         <div><h4>Project</h4><a href="https://github.com/durvesh55/AI-SOC-Analyst-Assistant" target="_blank" rel="noreferrer">GitHub</a><a href="#faq">FAQ</a><Link to="/login">Sign in</Link><Link to="/register">Register</Link></div>
-        <div className="l-foot2-legal">&copy; 2026 AlertDesk. Educational project.</div>
+        <div className="l-foot2-legal">&copy; 2026 AlertDesk. Educational project. <span className="l-built">Built with FastAPI &middot; React &middot; MongoDB &middot; MITRE ATT&amp;CK</span></div>
       </footer>
     </div>
   );

@@ -266,3 +266,6 @@ html { scroll-behavior: smooth; }
 .l-foot2-legal { grid-column: 1 / -1; padding-top: 20px; border-top: 1px solid var(--line); font-size: 13px; }
 @media (max-width: 980px) { .l-tabpanel { grid-template-columns: 1fr; } .l-cards.three { grid-template-columns: 1fr; } .l-foot2 { grid-template-columns: 1fr 1fr; } .l-foot2-brand { grid-column: 1 / -1; } }
 @media (max-width: 560px) { .l-log-row { grid-template-columns: 64px 1fr; } .l-log-row em { grid-column: 2; } .l-tabs button { padding: 10px 14px; } }
+
+.l-foot2-legal { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.l-built { opacity: .75; }
