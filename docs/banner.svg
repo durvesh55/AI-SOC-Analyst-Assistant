@@ -1,13 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 340" width="1200" height="340" role="img" aria-label="AlertDesk - AI SOC Analyst Assistant">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#050b1a"/><stop offset="1" stop-color="#14224a"/>
+      <stop offset="0" stop-color="#0b1220"/><stop offset="1" stop-color="#111a2c"/>
     </linearGradient>
     <linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#22d3ee"/><stop offset=".5" stop-color="#3b82f6"/><stop offset="1" stop-color="#8b5cf6"/>
+      <stop offset="0" stop-color="#5eead4"/><stop offset=".5" stop-color="#0d9488"/><stop offset="1" stop-color="#14b8a6"/>
     </linearGradient>
     <linearGradient id="sh" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#8b5cf6"/>
+      <stop offset="0" stop-color="#0d9488"/><stop offset="1" stop-color="#14b8a6"/>
     </linearGradient>
     <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
       <path d="M40 0H0V40" fill="none" stroke="#94a3b8" stroke-opacity=".12"/>
@@ -33,25 +33,25 @@
   </defs>
   <rect width="1200" height="340" fill="url(#bg)"/>
   <rect width="1200" height="340" fill="url(#grid)" mask="url(#m)"/>
-  <rect class="scan" x="0" y="0" width="1200" height="2" fill="#22d3ee"/>
+  <rect class="scan" x="0" y="0" width="1200" height="2" fill="#5eead4"/>
 
   <g class="fl">
-    <circle class="ring" cx="600" cy="96" r="46" fill="none" stroke="#22d3ee" stroke-width="2"/>
-    <circle class="ring ring2" cx="600" cy="96" r="46" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+    <circle class="ring" cx="600" cy="96" r="46" fill="none" stroke="#5eead4" stroke-width="2"/>
+    <circle class="ring ring2" cx="600" cy="96" r="46" fill="none" stroke="#14b8a6" stroke-width="2"/>
     <path d="M600 44l44 16v36c0 28-19 47-44 57-25-10-44-29-44-57V60l44-16Z" fill="url(#sh)"/>
     <g class="eye">
-      <path d="M572 96s11-17 28-17 28 17 28 17-11 17-28 17-28-17-28-17Z" fill="#050b1a"/>
-      <g class="pupil"><circle cx="600" cy="96" r="11" fill="#22d3ee"/><circle cx="600" cy="96" r="5" fill="#050b1a"/><circle cx="597" cy="92" r="2.500" fill="#fff"/></g>
+      <path d="M572 96s11-17 28-17 28 17 28 17-11 17-28 17-28-17-28-17Z" fill="#0b1220"/>
+      <g class="pupil"><circle cx="600" cy="96" r="11" fill="#5eead4"/><circle cx="600" cy="96" r="5" fill="#0b1220"/><circle cx="597" cy="92" r="2.500" fill="#fff"/></g>
     </g>
   </g>
 
   <text class="t" x="600" y="222" text-anchor="middle" font-size="64" font-weight="800" fill="#fff" letter-spacing="-1">Alert<tspan fill="url(#g)">Desk</tspan></text>
-  <text class="t" x="600" y="260" text-anchor="middle" font-size="22" fill="#93a3bb">AI-assisted security alert investigation for SOC analysts</text>
+  <text class="t" x="600" y="260" text-anchor="middle" font-size="22" fill="#94a3b8">AI-assisted security alert investigation for SOC analysts</text>
 
-  <g class="t" font-size="14" fill="#22d3ee">
-    <g class="chip"><rect x="90" y="70" width="150" height="30" rx="15" fill="#22d3ee" fill-opacity=".1" stroke="#22d3ee" stroke-opacity=".4"/><text x="165" y="90" text-anchor="middle">T1566 Phishing</text></g>
-    <g class="chip" style="animation-delay:2s"><rect x="150" y="190" width="170" height="30" rx="15" fill="#22d3ee" fill-opacity=".1" stroke="#22d3ee" stroke-opacity=".4"/><text x="235" y="210" text-anchor="middle">T1059 Execution</text></g>
-    <g class="chip" style="animation-delay:4s"><rect x="930" y="80" width="170" height="30" rx="15" fill="#22d3ee" fill-opacity=".1" stroke="#22d3ee" stroke-opacity=".4"/><text x="1015" y="100" text-anchor="middle">T1003 Cred Access</text></g>
-    <g class="chip" style="animation-delay:6s"><rect x="880" y="190" width="170" height="30" rx="15" fill="#22d3ee" fill-opacity=".1" stroke="#22d3ee" stroke-opacity=".4"/><text x="965" y="210" text-anchor="middle">T1567 Exfiltration</text></g>
+  <g class="t" font-size="14" fill="#5eead4">
+    <g class="chip"><rect x="90" y="70" width="150" height="30" rx="15" fill="#5eead4" fill-opacity=".1" stroke="#5eead4" stroke-opacity=".4"/><text x="165" y="90" text-anchor="middle">T1566 Phishing</text></g>
+    <g class="chip" style="animation-delay:2s"><rect x="150" y="190" width="170" height="30" rx="15" fill="#5eead4" fill-opacity=".1" stroke="#5eead4" stroke-opacity=".4"/><text x="235" y="210" text-anchor="middle">T1059 Execution</text></g>
+    <g class="chip" style="animation-delay:4s"><rect x="930" y="80" width="170" height="30" rx="15" fill="#5eead4" fill-opacity=".1" stroke="#5eead4" stroke-opacity=".4"/><text x="1015" y="100" text-anchor="middle">T1003 Cred Access</text></g>
+    <g class="chip" style="animation-delay:6s"><rect x="880" y="190" width="170" height="30" rx="15" fill="#5eead4" fill-opacity=".1" stroke="#5eead4" stroke-opacity=".4"/><text x="965" y="210" text-anchor="middle">T1567 Exfiltration</text></g>
   </g>
 </svg>
