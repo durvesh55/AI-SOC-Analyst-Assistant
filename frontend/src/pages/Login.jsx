@@ -29,7 +29,7 @@ export default function Login() {
         <div className="brand brand-center">
           <Logo size={56} />
         </div>
-        <h2>SOCrates</h2>
+        <h2>AlertDesk</h2>
         <p className="hint center">AI SOC Analyst Assistant</p>
         <p className="hint center">Sign in to manage alerts and investigations.</p>
         {notice && <div className="alert-box alert-info">{notice}</div>}

@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/banner.svg" alt="SOCrates - AI SOC Analyst Assistant" width="100%"/>
+<img src="docs/banner.svg" alt="AlertDesk - AI SOC Analyst Assistant" width="100%"/>
 
 <br/>
 
@@ -22,13 +22,13 @@
 
 ---
 
-## 🛡️ What is SOCrates?
+## 🛡️ What is AlertDesk?
 
 A full-stack **SOC incident-management and investigation platform** for security analysts.
 Analysts triage simulated alerts, open investigation cases, write notes and findings, see
 **suggested** MITRE ATT&CK mappings, keep an audit trail and export PDF investigation reports.
 
-> *Named after Socrates, the philosopher of questioning: the assistant helps an analyst ask the right questions of every alert.*
+> *AlertDesk is the one place where an analyst receives, investigates and closes security alerts.*
 
 > [!IMPORTANT]
 > **Scope:** this is an *educational* project. It is **not** a production SIEM and **not** an autonomous

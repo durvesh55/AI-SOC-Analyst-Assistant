@@ -284,8 +284,8 @@ export default function Landing() {
   useReveal();
 
   useEffect(() => {
-    document.title = "SOCrates - AI SOC Analyst Assistant";
-    return () => { document.title = "SOCrates - AI SOC Analyst Assistant"; };
+    document.title = "AlertDesk - AI SOC Analyst Assistant";
+    return () => { document.title = "AlertDesk - AI SOC Analyst Assistant"; };
   }, []);
 
   const cta = user
@@ -295,7 +295,7 @@ export default function Landing() {
   return (
     <div className="landing">
       <header className="l-nav">
-        <a className="l-logo" href="#top"><Logo size={38} /><b className="l-wordmark">SOC<em>rates</em></b></a>
+        <a className="l-logo" href="#top"><Logo size={38} /><b className="l-wordmark">Alert<em>Desk</em></b></a>
         <nav className={open ? "open" : ""} onClick={() => setOpen(false)}>
           <a href="#preview">Preview</a>
           <a href="#features">Features</a>
@@ -400,7 +400,7 @@ export default function Landing() {
       </section>
 
       <footer className="l-foot">
-        <div><span className="l-logo"><Logo size={34} /><b className="l-wordmark">SOC<em>rates</em></b> <small>AI SOC Analyst Assistant</small></span><p>Educational project with simulated alerts. Not a production SIEM and not an autonomous threat-detection system.</p></div>
+        <div><span className="l-logo"><Logo size={34} /><b className="l-wordmark">Alert<em>Desk</em></b> <small>AI SOC Analyst Assistant</small></span><p>Educational project with simulated alerts. Not a production SIEM and not an autonomous threat-detection system.</p></div>
         <div><a href="#features">Features</a><a href="#how">How it works</a><a href="#try">Try it</a><Link to="/login">Sign in</Link></div>
       </footer>
     </div>

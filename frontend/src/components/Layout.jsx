@@ -23,7 +23,7 @@ export default function Layout() {
         <Link className="brand" to="/" title="Back to the home page">
           <Logo size={36} />
           <div>
-            <strong>SOCrates</strong>
+            <strong>AlertDesk</strong>
             <small>AI SOC Analyst Assistant</small>
           </div>
         </Link>

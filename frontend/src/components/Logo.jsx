@@ -30,7 +30,7 @@ export default function Logo({ size = 40, className = "" }) {
   }
 
   return (
-    <svg ref={ref} className={`logo-mark ${className}`} viewBox="0 0 48 48" width={size} height={size} role="img" aria-label="SOCrates logo" onClick={onClick}>
+    <svg ref={ref} className={`logo-mark ${className}`} viewBox="0 0 48 48" width={size} height={size} role="img" aria-label="AlertDesk logo" onClick={onClick}>
       <defs>
         <linearGradient id="lg-shield" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0" stopColor="#3b82f6" />
