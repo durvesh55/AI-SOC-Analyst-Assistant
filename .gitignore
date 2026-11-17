@@ -26,3 +26,9 @@ Thumbs.db
 .pytest_cache/
 .coverage
 !.env.example
+
+# e2e artefacts
+e2e/shots/
+
+# e2e artefacts
+e2e/shots/

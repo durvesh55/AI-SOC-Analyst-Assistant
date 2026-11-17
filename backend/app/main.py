@@ -17,6 +17,9 @@ log = logging.getLogger("soc")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    if get_settings().jwt_secret.startswith("dev-only-insecure") or len(get_settings().jwt_secret) < 32:
+        log.warning("JWT_SECRET is the built-in development default or too short. "
+                    "Create backend/.env from .env.example and set a strong random JWT_SECRET.")
     try:
         init_db(get_db())
         log.info("MongoDB ready")
