@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 export default function Layout() {
@@ -8,7 +8,7 @@ export default function Layout() {
   const navigate = useNavigate();
 
   const links = [
-    ["/", "Dashboard"],
+    ["/dashboard", "Dashboard"],
     ["/alerts", "Alerts"],
     ["/cases", "Cases"],
     ["/audit", "Audit Logs"],
@@ -19,16 +19,16 @@ export default function Layout() {
   return (
     <div className="shell">
       <aside className={`sidebar ${open ? "sidebar-open" : ""}`}>
-        <div className="brand">
+        <Link className="brand" to="/" title="Back to the home page">
           <span className="brand-mark">SOC</span>
           <div>
             <strong>AI SOC Analyst</strong>
             <small>Assistant (educational)</small>
           </div>
-        </div>
+        </Link>
         <nav>
           {links.map(([to, label]) => (
-            <NavLink key={to} to={to} end={to === "/"} onClick={() => setOpen(false)}
+            <NavLink key={to} to={to} end={to === "/dashboard"} onClick={() => setOpen(false)}
               className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
               {label}
             </NavLink>

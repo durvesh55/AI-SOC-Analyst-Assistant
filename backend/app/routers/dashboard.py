@@ -4,6 +4,7 @@ from datetime import timedelta
 from fastapi import APIRouter, Depends, Query
 from pymongo.database import Database
 
+from ..config import get_settings
 from ..database import ALERT_STATUSES, SEVERITIES, CASE_STATUSES, CATEGORIES, get_db
 from ..deps import get_current_user
 from ..services.mitre import technique_catalog
@@ -65,7 +66,8 @@ def dashboard(days: int = Query(14, ge=3, le=90), user: dict = Depends(get_curre
 @router.get("/meta", tags=["Meta"], summary="Enumerations used by the UI (severities, statuses, categories)")
 def meta():
     return {"severities": SEVERITIES, "alert_statuses": ALERT_STATUSES, "case_statuses": CASE_STATUSES,
-            "categories": CATEGORIES, "roles": ["Admin", "Analyst"]}
+            "categories": CATEGORIES, "roles": ["Admin", "Analyst"],
+            "registration_invite_required": bool(get_settings().registration_invite_code)}
 
 
 @router.get("/mitre/techniques", tags=["MITRE ATT&CK"], summary="Techniques the rule engine can suggest")

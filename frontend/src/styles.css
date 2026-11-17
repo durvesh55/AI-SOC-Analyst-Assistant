@@ -24,7 +24,7 @@ small { color: var(--muted); }
 /* ---------- layout ---------- */
 .shell { display: flex; min-height: 100vh; }
 .sidebar { width: 236px; background: var(--side); color: var(--side-text); display: flex; flex-direction: column; padding: 16px 12px; position: sticky; top: 0; height: 100vh; flex-shrink: 0; }
-.brand { display: flex; align-items: center; gap: 10px; padding: 4px 8px 18px; color: #fff; }
+.brand { text-decoration: none !important; display: flex; align-items: center; gap: 10px; padding: 4px 8px 18px; color: #fff; }
 .brand small { display: block; color: #94a3b8; font-size: 11px; }
 .brand-center { justify-content: center; padding-bottom: 6px; }
 .brand-mark { background: var(--accent); color: #fff; font-weight: 800; font-size: 12px; padding: 8px 8px; border-radius: 8px; letter-spacing: .5px; }

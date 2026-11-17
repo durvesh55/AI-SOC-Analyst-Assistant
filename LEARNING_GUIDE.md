@@ -235,7 +235,11 @@ the numbers move. `pages/Dashboard.jsx` draws bars with plain CSS and the trend 
 * `components/ui.jsx` – reusable `Card`, `Modal`, `Badge`, `Pagination`, `Field`, `MitreList`, `Spinner`…
 * `pages/*.jsx` – one screen each. All data comes from `api.*` calls; there are no fake buttons.
 
-## 15. Testing
+## 15. The public landing page
+
+`frontend/src/pages/Landing.jsx` (+ `landing.css`, all scoped under `.landing`) is a normal React page with no login. It shows three useful patterns: `useReveal` (an `IntersectionObserver` that fades sections in as you scroll), `CountUp` (a `requestAnimationFrame` counter) and `LiveFeed` (a `setInterval` that pushes simulated alerts - note the interval is cleaned up in the effect's return). The **Try it** box calls `POST /api/public/mitre-suggest` (`backend/app/routers/public.py`), the only unauthenticated endpoint that does real work. Read how it stays safe: it never touches the database, caps input sizes with Pydantic and limits each IP to 20 requests per minute (`_rate_limit`).
+
+## 16. Testing
 
 `backend/tests/` uses **pytest** with FastAPI's `TestClient`. `conftest.py` creates a fresh in-memory MongoDB
 (`mongomock`) per test and fixtures like `admin`, `analyst`, `make_alert` that log in and return auth headers. Read

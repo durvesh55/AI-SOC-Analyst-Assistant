@@ -1,4 +1,5 @@
 """Registration, login, logout, profile and password change."""
+import secrets
 from datetime import datetime, timedelta, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
@@ -6,6 +7,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from pymongo.database import Database
 from pymongo.errors import DuplicateKeyError
 
+from ..config import get_settings
 from ..database import get_db
 from ..deps import client_ip, get_current_user
 from ..schemas import ChangePassword, LoginRequest, ProfileUpdate, RegisterRequest
@@ -62,7 +64,12 @@ def _token_response(user: dict) -> dict:
 
 @router.post("/register", status_code=201, summary="Register a new Analyst account")
 def register(body: RegisterRequest, request: Request, db: Database = Depends(get_db)):
-    """Self-registration always creates an **Analyst**. Only an Admin can grant the Admin role."""
+    """Self-registration always creates an **Analyst**. Only an Admin can grant the Admin role.
+
+    If REGISTRATION_INVITE_CODE is configured, the correct `invite_code` must be supplied."""
+    required = get_settings().registration_invite_code
+    if required and not secrets.compare_digest((body.invite_code or "").encode(), required.encode()):
+        raise HTTPException(status.HTTP_403_FORBIDDEN, "A valid invite code is required to register")
     now = utcnow()
     doc = {
         "username": body.username,

@@ -9,7 +9,7 @@ from fastapi.responses import JSONResponse
 
 from .config import get_settings
 from .database import get_db, init_db
-from .routers import alerts, audit, auth, cases, dashboard, users
+from .routers import alerts, audit, auth, cases, dashboard, public, users
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 log = logging.getLogger("soc")
@@ -17,7 +17,11 @@ log = logging.getLogger("soc")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    if get_settings().jwt_secret.startswith("dev-only-insecure") or len(get_settings().jwt_secret) < 32:
+    weak_secret = get_settings().jwt_secret.startswith("dev-only-insecure") or len(get_settings().jwt_secret) < 32
+    if weak_secret and get_settings().environment == "production":
+        # Refuse to start: a guessable secret would let anyone forge admin tokens.
+        raise RuntimeError("Refusing to start in production with a weak/default JWT_SECRET (need >= 32 chars).")
+    if weak_secret:
         log.warning("JWT_SECRET is the built-in development default or too short. "
                     "Create backend/.env from .env.example and set a strong random JWT_SECRET.")
     try:
@@ -69,7 +73,7 @@ async def unhandled_handler(request: Request, exc: Exception):
     return JSONResponse(status_code=500, content={"detail": "Internal server error"})
 
 
-for r in (auth.router, users.router, alerts.router, cases.router, audit.router, dashboard.router):
+for r in (auth.router, users.router, alerts.router, cases.router, audit.router, dashboard.router, public.router):
     app.include_router(r)
 
 

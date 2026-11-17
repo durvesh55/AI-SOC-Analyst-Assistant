@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 60
     bcrypt_rounds: int = 12  # tests lower this to 4 for speed
+    environment: str = "development"  # set to "production" when deployed
+    registration_invite_code: str = ""  # if set, self-registration requires this code
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
     seed_admin_password: str = "Admin@12345"
     seed_analyst_password: str = "Analyst@12345"

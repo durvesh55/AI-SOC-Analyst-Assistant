@@ -44,7 +44,7 @@ npm run dev
 
 | What | URL |
 |---|---|
-| **App (open this)** | http://localhost:5173 |
+| **Landing page + app (open this)** | http://localhost:5173 (the app itself lives at `/dashboard` after login) |
 | API | http://localhost:8001 |
 | Swagger / OpenAPI docs | http://localhost:8001/docs |
 | Health check | http://localhost:8001/api/health |
@@ -91,7 +91,9 @@ resolved cases, false positives, 14-day alert trend, analyst workload, recent ac
 
 **PDF reports** – case ID, alert info, severity, assignee, notes, MITRE mapping, timeline, findings & conclusion.
 
-**UI pages** – Login, Registration, Dashboard, Alerts, Alert details, Cases, Case investigation, Audit logs,
+**Landing page** – a public, animated front page at `/` (live simulated alert feed, animated counters, workflow walkthrough, FAQ and a working **ATT&CK suggester** that calls the real backend without login via `POST /api/public/mitre-suggest`, rate-limited and database-free).
+
+**UI pages** – Landing, Login, Registration, Dashboard, Alerts, Alert details, Cases, Case investigation, Audit logs,
 Admin user management, Profile/settings. Responsive (works at phone width).
 
 ### Who can do what
@@ -117,6 +119,8 @@ Admin user management, Profile/settings. Responsive (works at phone width).
 AI SOC ASSISTANT/
 ├── README.md                 ← you are here
 ├── LEARNING_GUIDE.md         ← beginner-friendly walkthrough of the code
+├── DEPLOYMENT.md             ← put it online (MongoDB Atlas + Render, free tier)
+├── render.yaml               ← Render Blueprint (API + static web)
 ├── backend/
 │   ├── .env.example          ← copy to .env (never commit .env)
 │   ├── requirements.txt      ← runtime deps          requirements-dev.txt ← + test deps
@@ -129,10 +133,11 @@ AI SOC ASSISTANT/
 │   │   ├── deps.py           ← get_current_user / require_admin dependencies
 │   │   ├── schemas.py        ← Pydantic request models (input validation)
 │   │   ├── utils.py          ← ObjectId parsing, JSON serialisation, ID counters
-│   │   ├── seed.py           ← development data
-│   │   ├── routers/          ← auth, users, alerts, cases, audit, dashboard (HTTP endpoints)
+│   │   ├── seed.py           ← development data (never run on production)
+│   │   ├── create_admin.py   ← create the first Admin safely (production bootstrap)
+│   │   ├── routers/          ← auth, users, alerts, cases, audit, dashboard, public (HTTP endpoints)
 │   │   └── services/         ← mitre.py (rules), audit.py, pdf.py, lookup.py, common.py
-│   └── tests/                ← pytest suite (76 tests)
+│   └── tests/                ← pytest suite (86 tests)
 ├── frontend/
 │   ├── package.json, vite.config.js, index.html, .env.example
 │   └── src/
@@ -140,7 +145,7 @@ AI SOC ASSISTANT/
 │       ├── api/client.js     ← fetch wrapper (adds JWT, handles errors/expiry)
 │       ├── context/          ← AuthContext, ToastContext
 │       ├── components/       ← Layout, ProtectedRoute, AlertForm, ui.jsx (Badge, Modal, Card, ...)
-│       └── pages/            ← one file per screen
+│       └── pages/            ← one file per screen (Landing.jsx + landing.css = public front page)
 └── e2e/                      ← browser end-to-end test (Puppeteer)
 ```
 
@@ -154,6 +159,8 @@ AI SOC ASSISTANT/
 | `JWT_SECRET` | **Must be changed.** `python -c "import secrets; print(secrets.token_urlsafe(48))"` |
 | `ACCESS_TOKEN_EXPIRE_MINUTES` | Token lifetime (default 60) |
 | `CORS_ORIGINS` | Comma-separated allowed browser origins |
+| `ENVIRONMENT` | `development` (default) or `production`. In production the server **refuses to start** with a weak/default `JWT_SECRET` |
+| `REGISTRATION_INVITE_CODE` | Optional. If set, self-registration requires this code (the register form shows the field automatically) |
 | `SEED_ADMIN_PASSWORD`, `SEED_ANALYST_PASSWORD` | Passwords used by `python -m app.seed` only |
 
 `.env` is git-ignored. Only `.env.example` (placeholders) is committed.
@@ -243,7 +250,8 @@ username/email + password). Summary (all under `/api`, JSON, `Authorization: Bea
 | `GET /audit-logs` · `GET /audit-logs/actions` | Read-only audit trail | own (Analyst) / all (Admin) |
 | `GET /dashboard` | Live statistics | any user |
 | `GET /mitre/techniques` | Techniques the rule engine can suggest | any user |
-| `GET /meta` · `GET /health` | UI enumerations / DB health | public |
+| `POST /public/mitre-suggest` | Rule-based ATT&CK suggestions for the landing-page demo (20 req/min/IP, no DB access) | public |
+| `GET /meta` · `GET /health` | UI enumerations (incl. `registration_invite_required`) / DB health | public |
 
 List endpoints return `{items, total, page, page_size}` and accept `page` / `page_size`. Errors are
 `{"detail": "..."}` (validation errors: `[{loc, msg}]`, never echoing submitted values).
@@ -251,7 +259,7 @@ List endpoints return `{items, total, page, page_size}` and accept `page` / `pag
 ## Testing
 
 ```powershell
-# Backend: 76 tests, ~5 s, use an in-memory MongoDB (nothing real is touched)
+# Backend: 86 tests, ~5 s, use an in-memory MongoDB (nothing real is touched)
 cd backend
 venv\Scripts\python -m pytest -q
 ```
@@ -266,8 +274,8 @@ cd backend ; python -m app.seed --reset ; cd ..
 cd e2e ; npm install ; npm test
 ```
 
-31 checks drive a real Chromium browser (Edge by default; set `BROWSER_PATH` for Chrome): login, filters, alert →
-case → notes → PDF → close → reopen, audit log, admin user management, analyst restrictions, registration and a
+40 checks drive a real Chromium browser (Edge by default; set `BROWSER_PATH` for Chrome): login, filters, alert →
+case → notes → PDF → close → reopen, the public landing page (live feed, counters, ATT&CK demo), audit log, admin user management, analyst restrictions, registration and a
 phone-width layout check.
 
 ## Security notes
@@ -279,6 +287,10 @@ immediately · RBAC and ownership enforced in the backend · strict Pydantic val
 headers (`nosniff`, `X-Frame-Options`, `no-store` on API) · generic error messages, no stack traces to clients ·
 login errors identical for unknown user/wrong password · secrets only in `.env` (git-ignored) · audit details drop
 credential-like keys · PDF text is XML-escaped.
+
+## Deploying online
+
+See **[DEPLOYMENT.md](DEPLOYMENT.md)** - MongoDB Atlas + Render (free tier), `render.yaml` Blueprint, first-admin bootstrap with `python -m app.create_admin`, invite-only registration and a production checklist. The configuration and production safety code are tested locally; a real cloud deployment has **not** been performed from this repo.
 
 ## Known limitations
 
@@ -293,6 +305,8 @@ credential-like keys · PDF text is XML-escaped.
   but they are not covered by automated tests.
 * Dashboard trend is computed in Python from recent alerts (fine at educational scale, not for millions of rows).
 * Browser end-to-end test only ran in Microsoft Edge (Chromium); Firefox/Safari were not tested.
+* The login lockout and the public demo rate-limiter are in-memory per process (reset on restart, not shared across instances).
+* `render.yaml`, `vercel.json` and `_redirects` are untested against the real hosting services; Docker is not used (not available on the dev machine).
 * No pagination on the assignable-users list; no alert deletion (by design, for audit integrity).
 
 ## Future improvements
@@ -309,4 +323,5 @@ SLA timers, Docker Compose for one-command startup, GitHub Actions CI (pytest + 
 * Closing a case sets all linked alerts to the chosen outcome (*Resolved* or *False Positive*); reopening returns them
   to *Under Investigation*.
 * Analysts see only their own audit entries; Admins see all.
+* The public landing page is at `/`; the authenticated app starts at `/dashboard`.
 * Backend default port is **8001** (8000 is often occupied).

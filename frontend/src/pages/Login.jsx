@@ -39,7 +39,7 @@ export default function Login() {
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" required />
         </Field>
         <button className="btn btn-primary btn-block" disabled={busy}>{busy ? "Signing in..." : "Sign in"}</button>
-        <p className="center">No account? <Link to="/register">Register</Link></p>
+        <p className="center">No account? <Link to="/register">Register</Link> &nbsp;|&nbsp; <Link to="/">Back to home</Link></p>
         <p className="hint center">Educational project using simulated alerts.</p>
       </form>
     </div>

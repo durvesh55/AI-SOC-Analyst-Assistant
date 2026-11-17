@@ -1,0 +1,45 @@
+# Render Blueprint: deploys the API and the web app together.
+# Use: Render dashboard -> New -> Blueprint -> pick this repo. Then fill the variables marked "sync: false".
+# See DEPLOYMENT.md for the full walkthrough.
+services:
+  # ---------------- FastAPI backend ----------------
+  - type: web
+    name: soc-assistant-api
+    runtime: python
+    rootDir: backend
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: ENVIRONMENT
+        value: production
+      - key: JWT_SECRET
+        generateValue: true          # Render creates a long random secret for you
+      - key: MONGO_URI
+        sync: false                  # your MongoDB Atlas connection string
+      - key: MONGO_DB
+        value: ai_soc_assistant
+      - key: CORS_ORIGINS
+        sync: false                  # the frontend URL, e.g. https://soc-assistant-web.onrender.com
+      - key: REGISTRATION_INVITE_CODE
+        sync: false                  # optional: makes self-registration invite-only
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "60"
+
+  # ---------------- React frontend (static site) ----------------
+  - type: web
+    name: soc-assistant-web
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_BASE
+        sync: false                  # e.g. https://soc-assistant-api.onrender.com/api
+    routes:
+      - type: rewrite                # single-page-app fallback so /login, /alerts... work on refresh
+        source: /*
+        destination: /index.html

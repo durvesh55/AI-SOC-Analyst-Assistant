@@ -42,6 +42,7 @@ class _PasswordMixin(BaseModel):
 
 # ---------- auth / users ----------
 class RegisterRequest(_PasswordMixin):
+    invite_code: Optional[str] = Field(default=None, max_length=100)
     username: str
     email: EmailStr
     full_name: str = Field(min_length=1, max_length=80)

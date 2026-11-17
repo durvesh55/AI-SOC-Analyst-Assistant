@@ -185,7 +185,7 @@ await session("admin", async (page) => {
   await clickText(page, "button", "Log out");
   await page.waitForSelector("form.auth-card");
   ok("logout returns to login", page.url().endsWith("/login"));
-  await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
+  await page.goto(`${BASE}/dashboard`, { waitUntil: "networkidle0" });
   ok("after logout dashboard is protected", page.url().endsWith("/login"));
 });
 
@@ -218,12 +218,47 @@ await session("analyst", async (page) => {
   }
   ok("found a read-only case for analyst", sawReadOnly);
   await page.setViewport({ width: 390, height: 800 });
-  await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
+  await page.goto(`${BASE}/dashboard`, { waitUntil: "networkidle0" });
   await settle(page);
   ok("mobile: menu button visible, sidebar hidden", await page.$eval(".menu-btn", (e) => getComputedStyle(e).display !== "none"));
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 2);
   ok("mobile: no horizontal page overflow", !overflow);
   await page.screenshot({ path: `${OUT}/mobile-dashboard.png` });
+});
+
+// ============ PUBLIC LANDING PAGE ============
+await session("landing", async (page) => {
+  await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
+  ok("landing: hero headline renders", (await text(page)).includes("Investigate security alerts"));
+  ok("landing: not behind login", page.url() === `${BASE}/`);
+  const feedTop = () => page.$eval(".l-feed .l-alert b", (e) => e.innerText);
+  await page.waitForSelector(".l-feed .l-alert");
+  const first = await feedTop();
+  await new Promise((r) => setTimeout(r, 3200));
+  ok("landing: live feed updates on its own", (await feedTop()) !== first && (await page.$$(".l-feed .l-alert")).length >= 4);
+  await page.evaluate(() => document.querySelector(".l-stats").scrollIntoView());
+  await new Promise((r) => setTimeout(r, 2200));
+  const stats = await page.$$eval(".l-stats b", (b) => b.map((x) => x.innerText));
+  ok("landing: counters animate to real values", stats[0] === "21" && stats[1] === "86+" && stats[2] === "10", stats.join(","));
+  await page.evaluate(() => document.querySelector("#try").scrollIntoView());
+  await page.waitForSelector(".l-tech", { timeout: 8000 });
+  ok("landing: live ATT&CK suggester calls the API (T1110)", (await text(page)).includes("T1110"));
+  await clickText(page, ".l-chip", "Phishing macro");
+  await page.waitForFunction(() => document.body.innerText.includes("T1566"), { timeout: 8000 });
+  ok("landing: sample chip re-runs suggester (T1566 + T1059.001)", (await text(page)).includes("T1059.001"));
+  await page.screenshot({ path: `${OUT}/landing.png` });
+  await page.click('.l-nav-cta a[href="/login"]');
+  await page.waitForSelector("form.auth-card");
+  ok("landing: Sign in link opens login", page.url().endsWith("/login"));
+  await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
+  await page.click('.l-nav-cta a[href="/register"]');
+  await page.waitForSelector("form.auth-card");
+  ok("landing: Get started opens registration", page.url().endsWith("/register"));
+  await page.setViewport({ width: 390, height: 844 });
+  await page.goto(`${BASE}/`, { waitUntil: "networkidle0" });
+  ok("landing (mobile): no horizontal overflow", !(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 2)));
+  await page.click(".l-burger");
+  ok("landing (mobile): menu opens", await page.$eval(".l-nav nav", (n) => getComputedStyle(n).display !== "none"));
 });
 
 // ============ REGISTER FLOW ============
