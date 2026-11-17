@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 340" width="1200" height="340" role="img" aria-label="SOCrates - AI SOC Analyst Assistant">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#050b1a"/><stop offset="1" stop-color="#14224a"/>
+    </linearGradient>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#22d3ee"/><stop offset=".5" stop-color="#3b82f6"/><stop offset="1" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <linearGradient id="sh" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#94a3b8" stroke-opacity=".12"/>
+    </pattern>
+    <radialGradient id="fade" cx=".5" cy=".4" r=".7"><stop offset=".2" stop-color="#fff"/><stop offset="1" stop-color="#000"/></radialGradient>
+    <mask id="m"><rect width="1200" height="340" fill="url(#fade)"/></mask>
+    <style>
+      .t { font-family: 'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif; }
+      .ring { transform-origin: 600px 96px; animation: ping 2.6s ease-out infinite; }
+      .ring2 { animation-delay: 1.3s; }
+      @keyframes ping { 0% { opacity: .8; transform: scale(.6); } 100% { opacity: 0; transform: scale(1.8); } }
+      .pupil { animation: look 6s ease-in-out infinite; }
+      @keyframes look { 0%,100% { transform: translate(0,0); } 25% { transform: translate(7px,-2px); } 55% { transform: translate(-7px,2px); } 80% { transform: translate(3px,3px); } }
+      .eye { transform-origin: 600px 96px; animation: blink 6s infinite; }
+      @keyframes blink { 0%,92%,100% { transform: scaleY(1); } 95% { transform: scaleY(.08); } }
+      .scan { animation: scan 4s linear infinite; }
+      @keyframes scan { 0% { transform: translateY(0); opacity: 0; } 15%,85% { opacity: .7; } 100% { transform: translateY(340px); opacity: 0; } }
+      .fl { animation: fl 5s ease-in-out infinite; }
+      @keyframes fl { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+      .chip { animation: fade 8s infinite; opacity: 0; }
+      @keyframes fade { 0% { opacity: 0; } 10%,60% { opacity: 1; } 75%,100% { opacity: 0; } }
+    </style>
+  </defs>
+  <rect width="1200" height="340" fill="url(#bg)"/>
+  <rect width="1200" height="340" fill="url(#grid)" mask="url(#m)"/>
+  <rect class="scan" x="0" y="0" width="1200" height="2" fill="#22d3ee"/>
+
+  <g class="fl">
+    <circle class="ring" cx="600" cy="96" r="46" fill="none" stroke="#22d3ee" stroke-width="2"/>
+    <circle class="ring ring2" cx="600" cy="96" r="46" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+    <path d="M600 44l44 16v36c0 28-19 47-44 57-25-10-44-29-44-57V60l44-16Z" fill="url(#sh)"/>
+    <g class="eye">
+      <path d="M572 96s11-17 28-17 28 17 28 17-11 17-28 17-28-17-28-17Z" fill="#050b1a"/>
+      <g class="pupil"><circle cx="600" cy="96" r="11" fill="#22d3ee"/><circle cx="600" cy="96" r="5" fill="#050b1a"/><circle cx="597" cy="92" r="2.500" fill="#fff"/></g>
+    </g>
+  </g>
+
+  <text class="t" x="600" y="222" text-anchor="middle" font-size="64" font-weight="800" fill="#fff" letter-spacing="-1">SOC<tspan fill="url(#g)">rates</tspan></text>
+  <text class="t" x="600" y="260" text-anchor="middle" font-size="22" fill="#93a3bb">Investigate security alerts faster with an AI-assisted SOC workspace</text>
+
+  <g class="t" font-size="14" fill="#22d3ee">
+    <g class="chip"><rect x="90" y="70" width="150" height="30" rx="15" fill="#22d3ee" fill-opacity=".1" stroke="#22d3ee" stroke-opacity=".4"/><text x="165" y="90" text-anchor="middle">T1566 Phishing</text></g>
+    <g class="chip" style="animation-delay:2s"><rect x="150" y="190" width="170" height="30" rx="15" fill="#22d3ee" fill-opacity=".1" stroke="#22d3ee" stroke-opacity=".4"/><text x="235" y="210" text-anchor="middle">T1059 Execution</text></g>
+    <g class="chip" style="animation-delay:4s"><rect x="930" y="80" width="170" height="30" rx="15" fill="#22d3ee" fill-opacity=".1" stroke="#22d3ee" stroke-opacity=".4"/><text x="1015" y="100" text-anchor="middle">T1003 Cred Access</text></g>
+    <g class="chip" style="animation-delay:6s"><rect x="880" y="190" width="170" height="30" rx="15" fill="#22d3ee" fill-opacity=".1" stroke="#22d3ee" stroke-opacity=".4"/><text x="965" y="210" text-anchor="middle">T1567 Exfiltration</text></g>
+  </g>
+</svg>

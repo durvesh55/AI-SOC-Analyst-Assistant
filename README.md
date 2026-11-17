@@ -1,12 +1,72 @@
-# AI SOC Analyst Assistant
+<div align="center">
+
+<img src="docs/banner.svg" alt="SOCrates - AI SOC Analyst Assistant" width="100%"/>
+
+<br/>
+
+![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white&style=for-the-badge)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white&style=for-the-badge)
+![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black&style=for-the-badge)
+![MongoDB](https://img.shields.io/badge/MongoDB-47A248?logo=mongodb&logoColor=white&style=for-the-badge)
+![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white&style=for-the-badge)
+![MITRE ATT&CK](https://img.shields.io/badge/MITRE-ATT%26CK-E4002B?style=for-the-badge)
+
+![Tests](https://img.shields.io/badge/backend_tests-86_passing-4ade80?style=flat-square)
+![Techniques](https://img.shields.io/badge/ATT%26CK_rules-21-22d3ee?style=flat-square)
+![Scope](https://img.shields.io/badge/scope-educational-fbbf24?style=flat-square)
+![Last commit](https://img.shields.io/github/last-commit/durvesh55/AI-SOC-Analyst-Assistant?style=flat-square)
+
+**[Quick start](#-quick-start-windows)** · **[Features](#-features)** · **[How it works](#-how-it-works)** · **[API](#-api-reference)** · **[Deploy](#-deploying-online)**
+
+</div>
+
+---
+
+## 🛡️ What is SOCrates?
 
 A full-stack **SOC incident-management and investigation platform** for security analysts.
 Analysts triage simulated alerts, open investigation cases, write notes and findings, see
 **suggested** MITRE ATT&CK mappings, keep an audit trail and export PDF investigation reports.
 
+> *Named after Socrates, the philosopher of questioning: the assistant helps an analyst ask the right questions of every alert.*
+
+> [!IMPORTANT]
 > **Scope:** this is an *educational* project. It is **not** a production SIEM and **not** an autonomous
 > threat-detection system. All alerts are simulated, and the "AI" in the name is an assistant-style
 > workflow: MITRE suggestions come from transparent keyword/category **rules**, not machine learning.
+
+## ✨ Highlights
+
+| | |
+|---|---|
+| 🚨 **Alert triage** | Search, filter, assign and track every change |
+| 🕵️ **Case investigation** | Notes, findings, live timeline, close / reopen |
+| 🗺️ **ATT&CK suggestions** | Explainable rules, always labelled *suggested* |
+| 📜 **Tamper-resistant audit log** | Append-only, no API can edit it |
+| 📄 **One-click PDF reports** | Alert data, notes, MITRE mapping, timeline, conclusion |
+| 🔐 **RBAC + JWT** | Admin / Analyst roles enforced on the backend |
+| 🎨 **Animated landing page** | Live alert feed, interactive eye-in-shield logo, working ATT&CK demo |
+
+## 🔄 How it works
+
+```mermaid
+flowchart LR
+    A[🚨 Alert arrives] --> B[🗺️ Triage and ATT&CK suggestion]
+    B --> C[🕵️ Open case and investigate]
+    C --> D[📝 Findings and conclusion]
+    D --> E[📄 Close and export PDF]
+    E -.->|Admin only| C
+```
+
+```mermaid
+flowchart TB
+    UI[React + Vite UI] -->|REST + JWT| API[FastAPI]
+    API --> RBAC{Role and ownership check}
+    RBAC --> DB[(MongoDB)]
+    RBAC --> AUDIT[Append-only audit log]
+    API --> MITRE[Rule-based ATT&CK engine]
+    API --> PDF[ReportLab PDF]
+```
 
 | Layer | Technology |
 |---|---|
@@ -17,7 +77,7 @@ Analysts triage simulated alerts, open investigation cases, write notes and find
 
 ---
 
-## Quick start (Windows)
+## 🚀 Quick start (Windows)
 
 You need: **Python 3.11+**, **Node.js 18+**, **MongoDB** running locally, **Git**.
 
@@ -66,7 +126,7 @@ database only) and reseeds.
 
 ---
 
-## Features
+## 🧰 Features
 
 **Authentication & authorization** – registration (always creates an *Analyst*), login by username or email,
 bcrypt password hashing, JWT access tokens with expiry, real logout (token revocation), per-user lockout after
@@ -113,7 +173,11 @@ Admin user management, Profile/settings. Responsive (works at phone width).
 
 ---
 
-## Project structure
+## 📁 Project structure
+
+<details>
+<summary><b>Show the folder tree</b></summary>
+
 
 ```
 AI SOC ASSISTANT/
@@ -149,7 +213,9 @@ AI SOC ASSISTANT/
 └── e2e/                      ← browser end-to-end test (Puppeteer)
 ```
 
-## Configuration
+</details>
+
+## ⚙️ Configuration
 
 `backend/.env` (copy from `.env.example`):
 
@@ -165,7 +231,7 @@ AI SOC ASSISTANT/
 
 `.env` is git-ignored. Only `.env.example` (placeholders) is committed.
 
-## Backend architecture
+## 🏗️ Backend architecture
 
 ```
 HTTP request ─► CORS + security-headers middleware
@@ -194,7 +260,11 @@ Why each supporting library (beyond FastAPI/React/MongoDB):
 | `vite` + `@vitejs/plugin-react` *(frontend dev)* | Fast dev server / bundler; proxies `/api` to the backend |
 | `puppeteer-core` *(e2e)* | Drives a real browser for the end-to-end test |
 
-## Database schema (MongoDB, database `ai_soc_assistant`)
+## 🗄️ Database schema (MongoDB, database `ai_soc_assistant`)
+
+<details>
+<summary><b>Show collections and fields</b></summary>
+
 
 All timestamps are UTC. `$jsonSchema` validators (required fields + enums) and indexes are created at startup by
 `database.init_db()`.
@@ -224,7 +294,13 @@ Supporting collections: **`counters`** (atomic sequence numbers for `ALT-`/`CASE
 *Design note:* history, notes and timeline are **embedded** in their parent documents because they are small,
 always read together with the parent, and need atomic `$push` updates.
 
-## API reference
+</details>
+
+## 🔌 API reference
+
+<details>
+<summary><b>Show all endpoints</b></summary>
+
 
 Interactive documentation with request/response schemas: **http://localhost:8001/docs** (use *Authorize* with a
 username/email + password). Summary (all under `/api`, JSON, `Authorization: Bearer <token>` unless noted):
@@ -256,7 +332,9 @@ username/email + password). Summary (all under `/api`, JSON, `Authorization: Bea
 List endpoints return `{items, total, page, page_size}` and accept `page` / `page_size`. Errors are
 `{"detail": "..."}` (validation errors: `[{loc, msg}]`, never echoing submitted values).
 
-## Testing
+</details>
+
+## ✅ Testing
 
 ```powershell
 # Backend: 86 tests, ~5 s, use an in-memory MongoDB (nothing real is touched)
@@ -278,7 +356,7 @@ cd e2e ; npm install ; npm test
 case → notes → PDF → close → reopen, the public landing page (live feed, counters, ATT&CK demo), audit log, admin user management, analyst restrictions, registration and a
 phone-width layout check.
 
-## Security notes
+## 🔒 Security notes
 
 Password hashing (bcrypt, per-password salt) · JWT with `exp` and `jti`, server-side revocation on logout/password
 change · role always read from the database, never trusted from the token · deactivated users lose access
@@ -288,11 +366,15 @@ headers (`nosniff`, `X-Frame-Options`, `no-store` on API) · generic error messa
 login errors identical for unknown user/wrong password · secrets only in `.env` (git-ignored) · audit details drop
 credential-like keys · PDF text is XML-escaped.
 
-## Deploying online
+## ☁️ Deploying online
 
 See **[DEPLOYMENT.md](DEPLOYMENT.md)** - MongoDB Atlas + Render (free tier), `render.yaml` Blueprint, first-admin bootstrap with `python -m app.create_admin`, invite-only registration and a production checklist. The configuration and production safety code are tested locally; a real cloud deployment has **not** been performed from this repo.
 
-## Known limitations
+## ⚠️ Known limitations
+
+<details>
+<summary><b>Show known limitations</b></summary>
+
 
 * Educational scope: simulated alerts only; no log ingestion, no real detection engine.
 * MITRE mappings are keyword/category rules (21 techniques) – they can miss real behaviour and produce
@@ -309,13 +391,15 @@ See **[DEPLOYMENT.md](DEPLOYMENT.md)** - MongoDB Atlas + Render (free tier), `re
 * `render.yaml`, `vercel.json` and `_redirects` are untested against the real hosting services; Docker is not used (not available on the dev machine).
 * No pagination on the assignable-users list; no alert deletion (by design, for audit integrity).
 
-## Future improvements
+</details>
+
+## 🔮 Future improvements
 
 Refresh tokens + httpOnly cookies, password reset by email, MFA, per-IP rate limiting, alert ingestion API/webhook,
 STIX/ATT&CK data import for a larger technique catalogue, file attachments/evidence on cases, comment threads,
 SLA timers, Docker Compose for one-command startup, GitHub Actions CI (pytest + build), frontend unit tests.
 
-## Design decisions (ambiguities resolved)
+## 🧭 Design decisions (ambiguities resolved)
 
 * Registration always creates an Analyst; Admins are created by seed or by another Admin.
 * All signed-in users can **read** all alerts and cases (shared SOC visibility); **changes** follow ownership.
