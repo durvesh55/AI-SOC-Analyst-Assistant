@@ -48,6 +48,27 @@ const SUMMARY = "Encoded PowerShell was launched by winword.exe on ws-fin-07 rig
 
 const BARS = [["Critical", 3, "var(--crit)"], ["High", 7, "var(--high)"], ["Medium", 5, "var(--med)"], ["Low", 2, "var(--low)"]];
 
+const PROBLEMS = [
+  { icon: "alert", title: "Alert fatigue", text: "Queues fill faster than analysts can read them. Severity, status and ownership keep the important alerts on top." },
+  { icon: "case", title: "Slow investigations", text: "Notes, findings and timelines get scattered across tools. A case keeps the whole story in one place." },
+  { icon: "audit", title: "No paper trail", text: "Who changed what, and when? An append-only audit log answers that without anyone editing history." },
+];
+
+const PLATFORM = [
+  { id: "triage", tab: "Triage", title: "See every alert. Act on the right one.", text: "A live queue you can search and filter by severity, status, category, assignee and date.", points: ["Claim or assign alerts with enforced ownership rules", "Every change is kept in the alert history", "Dashboard totals computed live from the database"], visual: "dash" },
+  { id: "investigate", tab: "Investigate", title: "Turn alerts into cases. Keep the story.", text: "Open a case from one or more alerts, add notes and findings, and follow a timeline as it builds.", points: ["Explainable ATT&CK suggestions, always labelled as suggestions", "Close with an outcome, reopen (Admin) when needed", "AI-assisted summary is on the roadmap and always human-reviewed"], visual: "ai" },
+  { id: "report", tab: "Report", title: "Finish with a report you can hand over.", text: "Export an investigation report as a PDF in one click.", points: ["Alert data, severity and assignee", "Notes, MITRE mapping and timeline", "Findings and conclusion"], visual: "report" },
+  { id: "audit", tab: "Audit", title: "Prove what happened. Nobody can edit it.", text: "Logins, assignments, notes, status changes and reports are recorded in an append-only log.", points: ["Analysts see their own entries, Admins see everything", "Credential-like fields are stripped from log details", "No API route can modify or delete an entry"], visual: "audit" },
+];
+
+const AUDIT_ROWS = [
+  ["09:12:04", "priya", "alert.assign", "ALT-000014"],
+  ["09:13:41", "priya", "case.create", "CASE-000003"],
+  ["09:20:15", "priya", "case.note", "CASE-000003"],
+  ["09:41:52", "alex", "case.close", "CASE-000003"],
+  ["09:42:10", "alex", "report.generate", "CASE-000003"],
+];
+
 const FAQ = [
   ["Is this a real SIEM or threat-detection product?", "No. It is an educational SOC workflow platform built with simulated alerts. It does not ingest real logs or detect attacks by itself."],
   ["How much of it is AI?", "Today the ATT&CK suggestions come from transparent, readable rules - there is no hidden model, and every suggestion explains itself. An optional LLM-written case summary (always human-reviewed) is on the roadmap."],
@@ -222,10 +243,10 @@ function Typewriter({ text, speed = 22 }) {
   return <p ref={ref} className="l-type">{text.slice(0, n)}<i className={n < text.length ? "caret" : "caret off"} /></p>;
 }
 
-function Preview() {
+function Preview({ part }) {
   return (
-    <div className="l-preview">
-      <div className="l-win">
+    <div className={`l-preview ${part ? "single" : ""}`}>
+      {part !== "ai" && <div className="l-win">
         <div className="l-win-bar"><i /><i /><i /><span>soc-assistant / dashboard</span></div>
         <div className="l-win-body">
           <div className="l-kpis">
@@ -244,12 +265,52 @@ function Preview() {
             ))}
           </div>
         </div>
-      </div>
-      <div className="l-ai">
+      </div>}
+      {part !== "dash" && <div className="l-ai">
         <div className="l-ai-head"><span className="l-spark">AI</span><strong>Investigation copilot</strong><small>preview - human review required</small></div>
         <Typewriter text={SUMMARY} />
         <div className="l-chain">
           <span>T1566 Phishing</span><b>&rarr;</b><span>T1059.001 PowerShell</span><b>&rarr;</b><span className="dim">T1003 Credential dumping?</span>
+        </div>
+      </div>}
+    </div>
+  );
+}
+
+function PlatformTabs() {
+  const [i, setI] = useState(0);
+  const t = PLATFORM[i];
+  return (
+    <div className="l-plat">
+      <div className="l-tabs" role="tablist">
+        {PLATFORM.map((p, k) => (
+          <button key={p.id} role="tab" aria-selected={k === i} className={k === i ? "on" : ""} onClick={() => setI(k)}>{p.tab}</button>
+        ))}
+      </div>
+      <div className="l-tabpanel" key={t.id}>
+        <div className="l-tabtext">
+          <h3>{t.title}</h3>
+          <p>{t.text}</p>
+          <ul>{t.points.map((x) => <li key={x}><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 5 5 9-10" /></svg>{x}</li>)}</ul>
+        </div>
+        <div className="l-tabvisual">
+          {t.visual === "dash" && <Preview part="dash" />}
+          {t.visual === "ai" && <Preview part="ai" />}
+          {t.visual === "report" && (
+            <div className="l-doc">
+              <div className="l-doc-head"><b>Investigation report</b><small>CASE-000003 - sample</small></div>
+              {["Alert summary", "Severity and assignee", "Investigator notes", "MITRE ATT&CK mapping (suggested)", "Timeline", "Findings and conclusion"].map((x, k) => (
+                <div className="l-doc-row" key={x}><span>{k + 1}</span><i style={{ width: `${88 - k * 9}%` }} /><em>{x}</em></div>
+              ))}
+              <div className="l-doc-foot">PDF - generated from live case data</div>
+            </div>
+          )}
+          {t.visual === "audit" && (
+            <div className="l-log">
+              <div className="l-log-head"><span className="l-live"><i /> APPEND-ONLY</span><small>sample entries</small></div>
+              {AUDIT_ROWS.map((r) => (<div className="l-log-row" key={r.join()}><code>{r[0]}</code><b>{r[1]}</b><span>{r[2]}</span><em>{r[3]}</em></div>))}
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -294,10 +355,14 @@ export default function Landing() {
 
   return (
     <div className="landing">
+      <div className="l-util">
+        <span><i /> Educational project - all alerts are simulated</span>
+        <span className="l-util-r"><a href="https://github.com/durvesh55/AI-SOC-Analyst-Assistant" target="_blank" rel="noreferrer">View on GitHub</a>{!user && <Link to="/login">Sign in</Link>}</span>
+      </div>
       <header className="l-nav">
         <a className="l-logo" href="#top"><Logo size={38} /><b className="l-wordmark">Alert<em>Desk</em></b></a>
         <nav className={open ? "open" : ""} onClick={() => setOpen(false)}>
-          <a href="#preview">Preview</a>
+          <a href="#platform">Platform</a>
           <a href="#features">Features</a>
           <a href="#how">How it works</a>
           <a href="#try">Try it</a>
@@ -319,13 +384,13 @@ export default function Landing() {
         <div className="l-spot" />
         <div className="l-orb o1" /><div className="l-orb o2" /><div className="l-grid" />
         <div className="l-hero-copy">
-          <span className="l-pill"><i /> Educational project - simulated data</span>
-          <h1>Investigate security alerts <em>faster</em> with an AI-assisted SOC workspace</h1>
+          <span className="l-eyebrow">AI-assisted alert investigation</span>
+          <h1>AI speed.<br /><em>Analyst judgment.</em></h1>
           <p>Triage alerts, build investigation cases, map activity to MITRE ATT&amp;CK with explainable suggestions and ship a professional PDF report - all in one place.</p>
           <div className="l-hero-cta">
             {cta}
             {!user && <Link className="l-btn l-btn-ghost" to="/login">Sign in</Link>}
-            <a className="l-btn l-btn-link" href="#try">Try the ATT&amp;CK suggester</a>
+            <a className="l-btn l-btn-link" href="#try">Try the ATT&amp;CK demo &rarr;</a>
           </div>
           <ul className="l-trust">
             <li>FastAPI</li><li>React</li><li>MongoDB</li><li>MITRE ATT&amp;CK</li><li>JWT + RBAC</li>
@@ -335,23 +400,35 @@ export default function Landing() {
       </section>
 
       <section className="l-stats" data-reveal>
-        <div><b><CountUp to={21} /></b><span>ATT&amp;CK techniques covered by rules</span></div>
+        <div><b><CountUp to={21} /></b><span>ATT&amp;CK techniques covered by explainable rules</span></div>
         <div><b><CountUp to={86} suffix="+" /></b><span>automated backend tests</span></div>
-        <div><b><CountUp to={10} /></b><span>connected workflow screens</span></div>
-        <div><b>100%</b><span>of key actions audited</span></div>
+        <div><b><CountUp to={4} /></b><span>steps from alert to report</span></div>
+        <div><b>100%</b><span>of key actions written to the audit log</span></div>
       </section>
 
       <div className="l-marquee" aria-hidden="true">
         <div>{[...TACTICS, ...TACTICS].map((t, i) => <span key={i}>{t}</span>)}</div>
       </div>
 
-      <section className="l-section" id="preview">
-        <div className="l-head" data-reveal><small>Product preview</small><h2>One workspace, from first alert to final report</h2><p>See the queue, the story and the AI-assisted summary side by side.</p></div>
-        <div data-reveal><Preview /></div>
+      <section className="l-section" id="problem">
+        <div className="l-head" data-reveal><small>The challenge</small><h2>Security teams drown in alerts.<br />Answers get lost.</h2><p>AlertDesk gives analysts one place to prioritise, investigate and document.</p></div>
+        <div className="l-cards three">
+          {PROBLEMS.map((f, i) => (
+            <article key={f.title} className="l-card" data-reveal style={{ transitionDelay: `${i * 80}ms` }}>
+              <span className="l-ico"><Icon name={f.icon} /></span>
+              <h3>{f.title}</h3><p>{f.text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="l-section l-alt" id="platform">
+        <div className="l-head" data-reveal><small>The platform</small><h2>Triage. Investigate. Report. Audit.</h2><p>One workspace for the whole lifecycle, with the analyst in command.</p></div>
+        <div data-reveal><PlatformTabs /></div>
       </section>
 
       <section className="l-section" id="features">
-        <div className="l-head" data-reveal><small>Capabilities</small><h2>Everything an analyst needs, nothing hidden</h2><p>A focused toolkit that follows the real investigation lifecycle from alert to report.</p></div>
+        <div className="l-head" data-reveal><small>In the box</small><h2>Everything an analyst needs. Nothing hidden.</h2><p>A focused toolkit that follows the real investigation lifecycle from alert to report.</p></div>
         <div className="l-cards">
           {FEATURES.map((f, i) => (
             <article key={f.title} className="l-card" data-reveal style={{ transitionDelay: `${(i % 3) * 80}ms` }}>
@@ -399,9 +476,14 @@ export default function Landing() {
         <div className="l-hero-cta center">{cta}{!user && <Link className="l-btn l-btn-ghost" to="/login">Sign in</Link>}</div>
       </section>
 
-      <footer className="l-foot">
-        <div><span className="l-logo"><Logo size={34} /><b className="l-wordmark">Alert<em>Desk</em></b> <small>AI SOC Analyst Assistant</small></span><p>Educational project with simulated alerts. Not a production SIEM and not an autonomous threat-detection system.</p></div>
-        <div><a href="#features">Features</a><a href="#how">How it works</a><a href="#try">Try it</a><Link to="/login">Sign in</Link></div>
+      <footer className="l-foot2">
+        <div className="l-foot2-brand">
+          <span className="l-logo"><Logo size={34} /><b className="l-wordmark">Alert<em>Desk</em></b></span>
+          <p>AI-assisted security alert investigation. An educational project with simulated alerts - not a production SIEM and not an autonomous threat-detection system.</p>
+        </div>
+        <div><h4>Product</h4><a href="#platform">Platform</a><a href="#how">How it works</a><a href="#try">ATT&amp;CK demo</a><a href="#security">Security</a></div>
+        <div><h4>Project</h4><a href="https://github.com/durvesh55/AI-SOC-Analyst-Assistant" target="_blank" rel="noreferrer">GitHub</a><a href="#faq">FAQ</a><Link to="/login">Sign in</Link><Link to="/register">Register</Link></div>
+        <div className="l-foot2-legal">&copy; 2026 AlertDesk. Educational project.</div>
       </footer>
     </div>
   );
