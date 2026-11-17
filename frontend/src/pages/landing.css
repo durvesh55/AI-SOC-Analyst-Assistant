@@ -17,6 +17,9 @@ html { scroll-behavior: smooth; }
   background: rgba(5, 11, 26, .72); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
 .l-logo { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: .2px; }
 .l-logo span { background: linear-gradient(135deg, var(--blue), var(--violet)); color: #fff; font-size: 12px; font-weight: 800; padding: 7px 8px; border-radius: 8px; }
+.l-wordmark { font-size: 20px; font-weight: 800; letter-spacing: -.3px; }
+.l-wordmark em { font-style: normal; background: linear-gradient(90deg, var(--cyan), var(--violet)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.l-foot .l-logo small { color: var(--muted); font-weight: 400; margin-left: 4px; }
 .l-nav nav { display: flex; gap: 24px; margin-left: 12px; color: var(--muted); font-size: 15px; }
 .l-nav nav a:hover { color: #fff; }
 .l-nav-cta { margin-left: auto; display: flex; gap: 10px; }

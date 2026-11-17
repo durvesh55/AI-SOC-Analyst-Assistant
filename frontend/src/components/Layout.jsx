@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import Logo from "./Logo";
 
 export default function Layout() {
   const { user, logout, isAdmin } = useAuth();
@@ -20,10 +21,10 @@ export default function Layout() {
     <div className="shell">
       <aside className={`sidebar ${open ? "sidebar-open" : ""}`}>
         <Link className="brand" to="/" title="Back to the home page">
-          <span className="brand-mark">SOC</span>
+          <Logo size={36} />
           <div>
-            <strong>AI SOC Analyst</strong>
-            <small>Assistant (educational)</small>
+            <strong>SOCrates</strong>
+            <small>AI SOC Analyst Assistant</small>
           </div>
         </Link>
         <nav>

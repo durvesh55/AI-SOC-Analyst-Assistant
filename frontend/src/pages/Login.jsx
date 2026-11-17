@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import Logo from "../components/Logo";
 import { ErrorBox, Field, PasswordInput } from "../components/ui";
 
 export default function Login() {
@@ -26,9 +27,10 @@ export default function Login() {
     <div className="auth-page">
       <form className="auth-card" onSubmit={submit}>
         <div className="brand brand-center">
-          <span className="brand-mark">SOC</span>
+          <Logo size={56} />
         </div>
-        <h2>AI SOC Analyst Assistant</h2>
+        <h2>SOCrates</h2>
+        <p className="hint center">AI SOC Analyst Assistant</p>
         <p className="hint center">Sign in to manage alerts and investigations.</p>
         {notice && <div className="alert-box alert-info">{notice}</div>}
         <ErrorBox error={error} />
