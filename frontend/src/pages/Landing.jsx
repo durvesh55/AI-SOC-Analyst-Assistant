@@ -284,8 +284,8 @@ export default function Landing() {
   useReveal();
 
   useEffect(() => {
-    document.title = "AlertDesk - AI SOC Analyst Assistant";
-    return () => { document.title = "AlertDesk - AI SOC Analyst Assistant"; };
+    document.title = "AlertDesk | Security Alert Investigation";
+    return () => { document.title = "AlertDesk | Security Alert Investigation"; };
   }, []);
 
   const cta = user
