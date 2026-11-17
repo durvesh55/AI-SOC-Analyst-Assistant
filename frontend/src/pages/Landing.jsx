@@ -385,7 +385,7 @@ export default function Landing() {
         <div className="l-orb o1" /><div className="l-orb o2" /><div className="l-grid" />
         <div className="l-hero-copy">
           <span className="l-eyebrow">AI-assisted alert investigation</span>
-          <h1>AI speed.<br /><em>Analyst judgment.</em></h1>
+          <h1>Investigate security alerts <em>faster</em> with an AI-assisted SOC workspace</h1>
           <p>Triage alerts, build investigation cases, map activity to MITRE ATT&amp;CK with explainable suggestions and ship a professional PDF report - all in one place.</p>
           <div className="l-hero-cta">
             {cta}
